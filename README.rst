@@ -1,37 +1,26 @@
-chimera-serial plugin
-=====================
+chimera-jmismart232 plugin
+==========================
 
-A chimera_ plugin for a bunch of serial bus devices.
+A chimera_ plugin for `JMI Smart 232`_ focusers.
 
 Usage
 -----
 
-Install chimera_ on your computer, and then, this package. Edit the configuration file adding one of the serial
-supported devices as on the example below.
+Install chimera_ on your computer, and then, this package. Edit the configuration file adding
+the JMI Smart 232 configuration as on the example below.
 
 Installation
 ------------
 
-Besides chimera_, ``chimera-serial`` depends only of pyserial_.
+Besides chimera_, ``chimera-jmismart232`` depends only of pyserial_.
 
 ::
 
-    pip install -U git+https://github.com/astroufsc/chimera-serial.git
+    pip install -U git+https://github.com/astroufsc/chimera-jmismart232.git
 
 
-Configuration Examples
-----------------------
-
-Here goes examples of the configuration to be added on ``chimera.config`` file.
-
-* `MEADE LX200`_ telescope
-
-::
-
-    telescope:
-        name: lx200
-        type: Meade
-        device: /dev/ttyS0    # can be COM1 on Windows
+Configuration Example
+---------------------
 
 * `JMI Smart 232`_ focuser
 
@@ -42,27 +31,6 @@ Here goes examples of the configuration to be added on ``chimera.config`` file.
       type: JMIsmart232
       device: COM3          # /dev/ttyS?? on linux
 
-* `Optec TCF-S`_ focuser
-
-::
-
-    focuser:
-      type: OptecTCFS
-      name: optec
-      device: COM6          # /dev/ttyS?? on linux
-
-* LNA_ 40cm dome
-
-::
-
-    dome:
-     type: DomeLNA40cm
-     name: dome
-     device: COM7
-     telescope: 200.131.64.200:7666/TheSkyTelescope/paramount
-     telescope: /FakeTelescope/fake
-     model: COTE/LNA
-
 
 Tested Hardware
 ---------------
@@ -70,9 +38,6 @@ Tested Hardware
 This plugin was tested on these hardware:
 
 * `JMI Smart 232`_ focuser
-* MEADE LX200 16'' telescope
-* `Optec TCF-S`_ focuser
-* LNA 40cm dome. This dome is a custom build.
 
 
 Contact
@@ -82,7 +47,7 @@ For more information, contact us on chimera's discussion list:
 https://groups.google.com/forum/#!forum/chimera-discuss
 
 Bug reports and patches are welcome and can be sent over our GitHub page:
-https://github.com/astroufsc/chimera-serial/
+https://github.com/astroufsc/chimera-jmismart232/
 
 .. _chimera: https://www.github.com/astroufsc/chimera/
 .. _pyserial: http://pyserial.sourceforge.net/
