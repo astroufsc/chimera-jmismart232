@@ -28,7 +28,7 @@ import threading
 from chimera.core.lock import lock
 
 from chimera.interfaces.focuser import (FocuserFeature,
-                                        InvalidFocusPositionException)
+                                        InvalidFocusPositionException, FocuserAxis)
 
 from chimera.instruments.focuser import FocuserBase
 
@@ -46,7 +46,13 @@ class JMIsmart232 (FocuserBase):
 
         self._supports = {FocuserFeature.TEMPERATURE_COMPENSATION: False,
                           FocuserFeature.POSITION_FEEDBACK: True,
-                          FocuserFeature.ENCODER: True}
+                          FocuserFeature.ENCODER: True,
+                          FocuserFeature.CONTROLLABLE_X: False,
+                          FocuserFeature.CONTROLLABLE_Y: False,
+                          FocuserFeature.CONTROLLABLE_Z: True,
+                          FocuserFeature.CONTROLLABLE_U: False,
+                          FocuserFeature.CONTROLLABLE_V: False,
+                          FocuserFeature.CONTROLLABLE_W: False}
 
         # debug log
         self._debugLog = None
@@ -94,7 +100,10 @@ class JMIsmart232 (FocuserBase):
             return True
 
     @lock
-    def moveIn(self, n):
+    def moveIn(self, n, axis=FocuserAxis.Z):
+        # Check if axis is on the permitted axis list
+        self._checkAxis(axis)
+
         target = self.getPosition() - n
 
         if self._inRange(target):
@@ -104,7 +113,10 @@ class JMIsmart232 (FocuserBase):
                                                 "boundaries." % target)
 
     @lock
-    def moveOut(self, n):
+    def moveOut(self, n, axis=FocuserAxis.Z):
+        # Check if axis is on the permitted axis list
+        self._checkAxis(axis)
+
         target = self.getPosition() + n
 
         if self._inRange(target):
@@ -114,7 +126,10 @@ class JMIsmart232 (FocuserBase):
                                                 "boundaries." % target)
 
     @lock
-    def moveTo(self, position):
+    def moveTo(self, position, axis=FocuserAxis.Z):
+        # Check if axis is on the permitted axis list
+        self._checkAxis(axis)
+
         if self._inRange(position):
             self._setPosition(position)
         else:
@@ -122,7 +137,9 @@ class JMIsmart232 (FocuserBase):
                                                 "boundaries." % int(position))
 
     @lock
-    def getPosition(self):
+    def getPosition(self, axis=FocuserAxis.Z):
+        # Check if axis is on the permitted axis list
+        self._checkAxis(axis)
 
         cmd = "p"
 
@@ -144,8 +161,11 @@ class JMIsmart232 (FocuserBase):
             raise IOError(
                 "Error getting focuser position. Invalid position returned")
 
-    def getRange(self):
-        return (0, 6600)
+    def getRange(self, axis=FocuserAxis.Z):
+        # Check if axis is on the permitted axis list
+        self._checkAxis(axis)
+
+        return 0, 6600
 
     def _setPosition(self, n):
         self.log.info("Changing focuser to %s" % n)
